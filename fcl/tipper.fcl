@@ -4,33 +4,34 @@ FUNCTION_BLOCK tipper
 
 // Define input variables
 VAR_INPUT
-    service : REAL;
-    food : REAL;
+    velocity : REAL;
+    distance : REAL;
 END_VAR
 
 // Define output variable
 VAR_OUTPUT
-    tip : REAL;
+    tension : REAL;
 END_VAR
 
-// Fuzzify input variable 'service'
-FUZZIFY service
-    TERM poor := (0, 1) (4, 0) ; 
-    TERM good := (1, 0) (4,1) (6,1) (9,0);
-    TERM excellent := (6, 0) (9, 1);
+// Fuzzify input variable 'velocity'
+FUZZIFY velocity
+    TERM low := (0, 1) (15, 1) (30, 0) ; 
+    TERM normal := (22, 0) (40,1) (80,0);
+    TERM fast := (70, 0) (100, 1) (120, 1);
 END_FUZZIFY
 
-// Fuzzify input variable 'food'
-FUZZIFY food
-    TERM rancid := (0, 1) (1, 1) (3,0) ;
-    TERM delicious := (7,0) (9,1);
+// Fuzzify input variable 'distance'
+FUZZIFY distance
+    TERM near := (0, 1) (700, 1) (1000,0) ;
+    TERM nearmedium := (900,0) (1600, 1) (2000, 0);
+    TERM far := (1900, 0) (2500, 1) (3000, 1);
 END_FUZZIFY
 
-// Defzzzify output variable 'tip'
-DEFUZZIFY tip
-    TERM cheap := (0,0) (5,1) (10,0);
-    TERM average := (10,0) (15,1) (20,0);
-    TERM generous := (20,0) (25,1) (30,0);
+// Defzzzify output variable 'tension'
+DEFUZZIFY tension
+    TERM donotbrake := (0,0) (500, 1) (800, 0);
+    TERM lighbrake := (600,0) (1200, 1) (1600, 0);
+    TERM hardbrake := (1500, 0) (2000, 1) (2500, 1);
     // Use 'Center Of Gravity' defuzzification method
     METHOD : COG;
     // Default value is 0 (if no rule activates defuzzifier)
@@ -46,14 +47,14 @@ RULEBLOCK No1
     // Use 'max' accumulation method
     ACCU : MAX;
 
-    RULE 1 : IF service IS poor OR food IS rancid 
-                THEN tip IS cheap;
+    RULE 1 : IF velocity IS fast AND distance IS near 
+                THEN tension IS hardbrake;
 
-    RULE 2 : IF service IS good 
-                THEN tip IS average; 
+    RULE 2 : IF velocity IS normal AND distance IS nearmedium
+                THEN tension IS lighbrake; 
 
-    RULE 3 : IF service IS excellent AND food IS delicious 
-                THEN tip is generous;
+    RULE 3 : IF velocity IS low AND distance IS far 
+                THEN tension is donotbrake;
 END_RULEBLOCK
 
 END_FUNCTION_BLOCK

@@ -35,12 +35,12 @@ public class TestTipper {
 		JFuzzyChart.get().chart(functionBlock);
                 
                 // Set inputs (low in both variables)
-		//functionBlock.setVariable("service", 2);
-		//functionBlock.setVariable("food", 2);
+		//functionBlock.setVariable("velocity", 2);
+		//functionBlock.setVariable("distance", 2);
                 
 		// Set inputs (average in both variables)
-		functionBlock.setVariable("service", 5);
-		functionBlock.setVariable("food", 5);
+		functionBlock.setVariable("velocity", 200);
+		functionBlock.setVariable("distance", 100);
                 
                 // Set inputs (high in both variables)
 		//functionBlock.setVariable("service", 9);
@@ -50,13 +50,13 @@ public class TestTipper {
 		functionBlock.evaluate();
 
 		// Show output variable's chart
-		Variable tip = functionBlock.getVariable("tip");
+		Variable tip = functionBlock.getVariable("tension");
 		JFuzzyChart.get().chart(tip, tip.getDefuzzifier(), true);
-		Gpr.debug("poor[service]: " + functionBlock.getVariable("service").getMembership("poor"));
+		Gpr.debug("low[velocity]: " + functionBlock.getVariable("velocity").getMembership("low"));
 
 		// Print ruleSet
 		System.out.println(functionBlock);
-		System.out.println("TIP:" + functionBlock.getVariable("tip").getValue());
+		System.out.println("Tension:" + functionBlock.getVariable("tension").getValue());
 	}
 }
 
